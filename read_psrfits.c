@@ -335,14 +335,20 @@ int psrfits_read_subint(struct psrfits *pf) {
     }
 
     // TODO: bad! really need to base this on column names
+    fits_get_colnum(pf->fptr, 0, "INDEXVAL", &colnum, status);
+    printf("INDEXVAL colnum = %d\n", colnum);
+    fits_read_col(pf->fptr, TDOUBLE, colnum, row, 1, 1, NULL, &(sub->indexval), NULL, status);
     fits_get_colnum(pf->fptr, 0, "TSUBINT", &colnum, status);
+    printf("TSUBINT colnum = %d\n", colnum);
     fits_read_col(pf->fptr, TDOUBLE, colnum, row, 1, 1, NULL, &(sub->tsubint),
             NULL, status);
+    printf("sub->tsubint = %f\n", sub->tsubint);
     double last_offs = sub->offs;
     fits_get_colnum(pf->fptr, 0, "OFFS_SUB", &colnum, status);
     fits_read_col(pf->fptr, TDOUBLE, colnum, row, 1, 1, NULL, &(sub->offs),
             NULL, status);
     // Hack to fix wrapping in coherent data
+    printf("sub_offs = %f\n", sub->offs);
     if (pf->tot_rows > 0) {
         double delta_offs = sub->offs - last_offs;
         double wrap_offs = 4294967296L * hdr->dt;
@@ -460,6 +466,9 @@ int psrfits_read_subint(struct psrfits *pf) {
         fits_read_col(pf->fptr, TFLOAT, colnum, row, 1, sub->bytes_per_subint,
                       NULL, sub->data, NULL, status);
     }
+
+    fits_get_colnum(pf->fptr, 0, "PERIOD", &colnum, status);
+    fits_read_col(pf->fptr, TDOUBLE, colnum, row, 1, 1, NULL, &(sub->period), NULL, status);
 
     // Complain on error
     fits_report_error(stderr, *status);

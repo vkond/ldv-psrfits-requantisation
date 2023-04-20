@@ -1,0 +1,187 @@
+###############################################################################
+#
+# PRIMARY
+#
+###############################################################################
+#
+SIMPLE  =                    T / file does conform to FITS standard             
+BITPIX  =                    8 / number of bits per data pixel                  
+NAXIS   =                    0 / number of data axes                            
+EXTEND  =                    T / FITS dataset may contain extensions            
+COMMENT   FITS (Flexible Image Transport System) format is defined in 'Astronomy
+COMMENT   and Astrophysics', volume 376, page 359; bibcode: 2001A&A...376..359H 
+HDRVER  = '5.4'                / Header version                                 
+FITSTYPE= 'PSRFITS'            / FITS definition for pulsar data files          
+TELESCOP= 'LOFAR'              / Telescope name                                 
+OBS_MODE= 'SEARCH'             / (PSR, CAL, SEARCH)                             
+SRC_NAME= '                  ' / Source or scan ID                              
+FRONTEND= '                  ' / Frontend ID                                    
+BACKEND = 'COBALT'             / Backend ID                                     
+OBSERVER= '                  ' / Observer                                       
+PROJID  = '                  ' / Project ID                                     
+DATE-OBS= '                   ' / Date of observation (YYYY-MM-DDThh:mm:ss UTC) 
+RA      = '                  ' / Right ascension (hh:mm:ss.ssss)                
+DEC     = '                  ' / Declination (-dd:mm:ss.sss)                    
+EQUINOX = 2000.0               / Equinox of coords (e.g. 2000.0)                
+COORD_MD= 'J2000'              / Coordinate mode (J2000, GALACTIC, ECLIPTIC)    
+OBSNCHAN=                    * / Number of frequency channels (original)        
+OBSBW   =                    * / [MHz] Bandwidth for observation                
+CHAN_DM =                  0.0 / [cm-3 pc] DM used for on-line dedispersion     
+TRK_MODE= 'TRACK'              / Track mode (TRACK, SCANGC, SCANLAT)            
+BMIN    =                    * / [deg] Beam minor axis length (needs to be set t
+BMAJ    =                    * / [deg] Beam major axis length                   
+IBEAM   = '                  ' / Tied-array beam ID                             
+SCANLEN =                    * / [s] Requested scan length                      
+PNT_ID  = '                  ' / Sub-Array Pointing ID                          
+FD_POLN = 'LIN'                / LIN or CIRC                                    
+FD_HAND =                    1 / +/- 1. +1 is LIN:A=X,B=Y, CIRC:A=L,B=R (I)     
+FD_SANG =                  0.0 / [deg] FA of E vect for equal sig in A&B (E)    
+FD_XYPH =                  0.0 / [deg] Phase of A^* B for injected cal (E)      
+OBSFREQ =                    * / [MHz] Centre frequency for observation         
+STT_IMJD=                    * / Start MJD (UTC days) (J - long integer)        
+STT_SMJD=                    * / [s] Start time (sec past UTC 00h) (J)          
+STT_OFFS=                    * / [s] Start time offset (D)                     
+NRCVR   =                    2 / Number of receiver polarisation channels       
+BE_PHASE=                    0 / 0/+1/-1 BE cross-phase: 0 unknown, +/-1 std/rev
+BECONFIG= UNSET                / Backend configuration file name                
+BE_DCC  =                    0 / 0/1 BE downconversion conjugation corrected    
+BE_DELAY=                  0.0 / [s] Backend propn delya from digitiser input   
+TCYCLE  =                  0.0 / [s] On-line cycle time (D)                     
+BPA     =                  0.0 / [deg] Beam position angle                      
+STT_CRD1= '                  ' / Start coord 1 (hh:mm:ss.sss or ddd.ddd)        
+STP_CRD1= '                  ' / Stop coord 1 (hh:mm:ss.sss or ddd.ddd)         
+STT_CRD2= '                  ' / Start coord 2 (-dd:mm:ss.sss or -dd.ddd)       
+STP_CRD2= '                  ' / Stop coord 2 (-dd:mm:ss.sss or -dd.ddd)        
+STT_LST =                    * / [s] Start LST (D)                              
+FD_MODE = 'FA'                 / Feed track mode - FA, CPA, SPA, TPA            
+FA_REQ  =                  0.0 / [deg] Feed/Posn angle requested (E)            
+CAL_MODE= 'OFF'                / Cal mode (OFF, SYNC, EXT1, EXT2)               
+CAL_FREQ=                  0.0 / [Hz] Cal modulation frequency (E)              
+CAL_DCYC=                  0.0 / Cal duty cycle (E)                             
+CAL_PHS =                  0.0 / Cal phase (wrt start time) (E)                 
+CAL_NPHS=                    0 / Number of states in cal phase (I)              
+END
+#
+###############################################################################
+#
+# SUBINT
+#
+###############################################################################
+#
+XTENSION= BINTABLE             / binary table extension                         
+BITPIX  =                    8 / 8-bit bytes                                    
+NAXIS   =                    2 / 2-dimensional binary table                     
+NAXIS1  =                    * / width of table in bytes                        
+NAXIS2  =                    * / number of rows in table                        
+PCOUNT  =                    0 / size of special data area                      
+GCOUNT  =                    1 / one data group (required keyword)              
+TFIELDS =                    * / number of fields in each row                   
+EXTNAME = SUBINT               / name of this binary table extension            
+INT_TYPE= 'TIME'               / Time axis (TIME, BINPHSPERI, BINLNGASC, etc)   
+INT_UNIT= 'SEC'                / Unit of time axis (SEC, PHS (0-1), DEG)        
+SCALE   = 'FluxDen'            / Intensity Units (FluxDen/RefFlux/Jansky))      
+POL_TYPE= 'AA+BB'              / Polarisation identifier (e.g., AABBCRCI, AA+BB)
+NPOL    =                    1 / Nr of polarisations                            
+NCHNOFFS=                    0 / Channel/sub-band offset for split files        
+NSUBOFFS=                    0 / Subint offset (Contiguous SEARCH-mode files)   
+TBIN    =                    * / [s] Time per bin or sample                     
+NBIN    =                    1 / Nr of bins (PSR/CAL mode; else 1)              
+NSBLK   =                    * / Samples/row (SEARCH mode, else 1)              
+NBITS   =                    8 / Nr of bits/datum (SEARCH mode data, else 1)    
+NCHAN   =                    * / Number of channels/sub-bands in this file      
+CHAN_BW =                    * / [MHz] Channel/sub-band width                   
+DM      =                  0.0 / [cm-3 pc] DM for post-detection dedisperion    
+TTYPE#  = INDEXVAL             / label for field   1                            
+TFORM#  = 1D                   / data format of field: 8-byte DOUBLE            
+TTYPE#  = TSUBINT              / label for field   2                            
+TFORM#  = 1D                   / data format of field: 8-byte DOUBLE            
+TUNIT#  = s                    / physical unit of field                         
+TTYPE#  = OFFS_SUB             / label for field   3                            
+TFORM#  = 1D                   / data format of field: 8-byte DOUBLE            
+TUNIT#  = s                    / physical unit of field                         
+TTYPE#  = LST_SUB              / label for field   4                            
+TFORM#  = 1D                   / data format of field: 8-byte DOUBLE            
+TUNIT#  = s                    / physical unit of field                         
+TTYPE#  = RA_SUB               / label for field   5                            
+TFORM#  = 1D                   / data format of field: 8-byte DOUBLE            
+TUNIT#  = deg                  / physical unit of field                         
+TTYPE#  = DEC_SUB              / label for field   6                            
+TFORM#  = 1D                   / data format of field: 8-byte DOUBLE            
+TUNIT#  = deg                  / physical unit of field                         
+TTYPE#  = GLON_SUB             / label for field   7                            
+TFORM#  = 1D                   / data format of field: 8-byte DOUBLE            
+TUNIT#  = deg                  / physical unit of field                         
+TTYPE#  = GLAT_SUB             / label for field   8                            
+TFORM#  = 1D                   / data format of field: 8-byte DOUBLE            
+TUNIT#  = deg                  / physical unit of field                         
+TTYPE#  = FD_ANG               / label for field   9                            
+TFORM#  = 1E                   / data format of field: 4-byte REAL              
+TUNIT#  = deg                  / physical unit of field                         
+TTYPE#  = POS_ANG              / label for field  10                            
+TFORM#  = 1E                   / data format of field: 4-byte REAL              
+TUNIT#  = deg                  / physical unit of field                         
+TTYPE#  = PAR_ANG              / label for field  11                            
+TFORM#  = 1E                   / data format of field: 4-byte REAL              
+TUNIT#  = deg                  / physical unit of field                         
+TTYPE#  = TEL_AZ               / label for field  12                            
+TFORM#  = 1E                   / data format of field: 4-byte REAL              
+TUNIT#  = deg                  / physical unit of field                         
+TTYPE#  = TEL_ZEN              / label for field  13                            
+TFORM#  = 1E                   / data format of field: 4-byte REAL              
+TUNIT#  = deg                  / physical unit of field                         
+TTYPE#  = DAT_FREQ             / label for field  14                            
+TFORM#  = E                    / data format of field: 4-byte REAL              
+TUNIT#  = MHz                  / physical unit of field                         
+TTYPE#  = DAT_WTS              / label for field  15                            
+TFORM#  = E                    / data format of field: 4-byte REAL              
+TTYPE#  = DAT_OFFS             / label for field  16                            
+TFORM#  = E                    / data format of field: 4-byte REAL              
+TTYPE#  = DAT_SCL              / label for field  17                            
+TFORM#  = E                    / data format of field: 4-byte REAL              
+TTYPE#  = DATA                 / label for field  18                            
+TDIM#   = (*,*,*,*)            / Dimensions (NBITS or NBIN,NCHAN,NPOL,NSBLK)
+TFORM#  = B                    / data format of field: BYTE                     
+TUNIT#  = Jy                   / physical unit of field                         
+TTYPE#  = PERIOD               / label for field  19                            
+TFORM#  = 1D                   / data format of field: 8-byte DOUBLE            
+TUNIT#  = s                    / physical unit of field                         
+END
+#
+###############################################################################
+#
+# DIG_STAT
+#
+###############################################################################
+#
+XTENSION= BINTABLE             / binary table extension                         
+BITPIX  =                    8 / 8-bit bytes                                    
+NAXIS   =                    2 / 2-dimensional binary table                     
+NAXIS1  =                    0 / width of table in bytes                        
+NAXIS2  =                    0 / number of rows in table                        
+PCOUNT  =                    0 / size of special data area                      
+GCOUNT  =                    1 / one data group (required keyword)              
+TFIELDS =                    0 / number of fields in each row                   
+EXTNAME = DIG_STAT             / name of this binary table extension            
+NLEV    =              2317248 / Number of digitiser levels                     
+DIG_MODE= 9-bit                / Digitiser mode                                 
+NDIGR   =                    2 / Number of digitised channels (I)               
+NCYCSUB =                    1 / Number of correlator cycles per subint         
+DIGLEV  = AUTO                 / Digitiser level-setting mode (AUTO, FIX)       
+END
+#
+###############################################################################
+#
+# DIG_CNTS
+#
+###############################################################################
+#
+XTENSION= BINTABLE             / binary table extension                         
+BITPIX  =                    8 / 8-bit bytes                                    
+NAXIS   =                    2 / 2-dimensional binary table                     
+NAXIS1  =                    0 / width of table in bytes                        
+NAXIS2  =                    0 / number of rows in table                        
+PCOUNT  =                    0 / size of special data area                      
+GCOUNT  =                    1 / one data group (required keyword)              
+TFIELDS =                    0 / number of fields in each row                   
+EXTNAME = DIG_CNTS             / name of this binary table extension            
+END

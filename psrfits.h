@@ -8,7 +8,7 @@
 #define PSRFITS_MAXFILELEN_FOLD 1L
 
 // The following is the template file to use to create a PSRFITS file.
-#define PSRFITS_SEARCH_TEMPLATE "guppi_PSRFITS_v3.4_search_template.txt"
+#define PSRFITS_SEARCH_TEMPLATE "lofar_PSRFITS_v5.4_search_template.txt"
 #define PSRFITS_FOLD_TEMPLATE "guppi_PSRFITS_v3.4_fold_template.txt"
 
 struct hdrinfo {
@@ -68,6 +68,7 @@ struct hdrinfo {
 };
 
 struct subint {
+    double indexval;
     double tsubint;         // Length of subintegration (sec)
     double offs;            // Offset from Start of subint centre (sec)
     double lst;             // LST at subint centre (sec)
@@ -89,7 +90,21 @@ struct subint {
     float *fdata;           // Ptr to optional array to compute scaled and offset data
     unsigned char *rawdata; // Ptr to the raw data itself (for non-8bit)
     unsigned char *data;    // Ptr to 8-bit representation of the data itself
+    double period;
 };
+
+/*
+struct dig_stat {
+    int nlev;               // Number of digitiser levels
+    char dig_mode[8];       // Digitiser mode
+    int ndigr;              // Number of digitised channels (I)
+    int ncycsub;            // Number of correlator cycles per subint
+    char diglev[8];         // Digitiser level-setting mode (AUTO, FIX)
+};
+
+struct dig_cnts {
+};
+*/
 
 #include "polyco_struct.h"
 struct foldinfo {

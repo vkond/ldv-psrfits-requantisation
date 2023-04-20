@@ -272,25 +272,25 @@ int psrfits_create(struct psrfits *pf) {
         if (hdr->onlyI) out_npol = 1;
         int out_nsblk = hdr->nsblk / hdr->ds_time_fact;
 
-        fits_modify_vector_len(pf->fptr, 13, out_nchan, status); // DAT_FREQ
-        fits_modify_vector_len(pf->fptr, 14, out_nchan, status); // DAT_WTS
+        fits_modify_vector_len(pf->fptr, 14, out_nchan, status); // DAT_FREQ
+        fits_modify_vector_len(pf->fptr, 15, out_nchan, status); // DAT_WTS
         itmp = out_nchan * out_npol;
-        fits_modify_vector_len(pf->fptr, 15, itmp, status); // DAT_OFFS
-        fits_modify_vector_len(pf->fptr, 16, itmp, status); // DAT_SCL
+        fits_modify_vector_len(pf->fptr, 16, itmp, status); // DAT_OFFS
+        fits_modify_vector_len(pf->fptr, 17, itmp, status); // DAT_SCL
         
         if (mode==search) {
             lltmp = out_nsblk;
             lltmp = (lltmp * hdr->nbits * out_nchan * out_npol) / 8L;
         } else if (mode==fold)
             lltmp = (hdr->nbin * out_nchan * out_npol);
-        fits_modify_vector_len(pf->fptr, 17, lltmp, status); // DATA
+        fits_modify_vector_len(pf->fptr, 18, lltmp, status); // DATA
         // Update the TDIM field for the data column
         if (mode==search)
             sprintf(ctmp, "(1,%d,%d,%d)", out_nchan, out_npol,
                     out_nsblk/(8/hdr->nbits));
         else if (mode==fold)
             sprintf(ctmp, "(%d,%d,%d,1)", hdr->nbin, out_nchan, out_npol);
-        fits_update_key(pf->fptr, TSTRING, "TDIM17", ctmp, NULL, status);
+        fits_update_key(pf->fptr, TSTRING, "TDIM18", ctmp, NULL, status);
     }
 
     fits_flush_file(pf->fptr, status);
@@ -348,37 +348,39 @@ int psrfits_write_subint(struct psrfits *pf) {
     }
 
     row = pf->rownum;
-    fits_write_col(pf->fptr, TDOUBLE, 1, row, 1, 1, &(sub->tsubint), status);
-    fits_write_col(pf->fptr, TDOUBLE, 2, row, 1, 1, &(sub->offs), status);
-    fits_write_col(pf->fptr, TDOUBLE, 3, row, 1, 1, &(sub->lst), status);
-    fits_write_col(pf->fptr, TDOUBLE, 4, row, 1, 1, &(sub->ra), status);
-    fits_write_col(pf->fptr, TDOUBLE, 5, row, 1, 1, &(sub->dec), status);
-    fits_write_col(pf->fptr, TDOUBLE, 6, row, 1, 1, &(sub->glon), status);
-    fits_write_col(pf->fptr, TDOUBLE, 7, row, 1, 1, &(sub->glat), status);
+    fits_write_col(pf->fptr, TDOUBLE, 1, row, 1, 1, &(sub->indexval), status);
+    fits_write_col(pf->fptr, TDOUBLE, 2, row, 1, 1, &(sub->tsubint), status);
+    fits_write_col(pf->fptr, TDOUBLE, 3, row, 1, 1, &(sub->offs), status);
+    fits_write_col(pf->fptr, TDOUBLE, 4, row, 1, 1, &(sub->lst), status);
+    fits_write_col(pf->fptr, TDOUBLE, 5, row, 1, 1, &(sub->ra), status);
+    fits_write_col(pf->fptr, TDOUBLE, 6, row, 1, 1, &(sub->dec), status);
+    fits_write_col(pf->fptr, TDOUBLE, 7, row, 1, 1, &(sub->glon), status);
+    fits_write_col(pf->fptr, TDOUBLE, 8, row, 1, 1, &(sub->glat), status);
     ftmp = (float) sub->feed_ang;
-    fits_write_col(pf->fptr, TFLOAT, 8, row, 1, 1, &ftmp, status);
-    ftmp = (float) sub->pos_ang;
     fits_write_col(pf->fptr, TFLOAT, 9, row, 1, 1, &ftmp, status);
-    ftmp = (float) sub->par_ang;
+    ftmp = (float) sub->pos_ang;
     fits_write_col(pf->fptr, TFLOAT, 10, row, 1, 1, &ftmp, status);
-    ftmp = (float) sub->tel_az;
+    ftmp = (float) sub->par_ang;
     fits_write_col(pf->fptr, TFLOAT, 11, row, 1, 1, &ftmp, status);
-    ftmp = (float) sub->tel_zen;
+    ftmp = (float) sub->tel_az;
     fits_write_col(pf->fptr, TFLOAT, 12, row, 1, 1, &ftmp, status);
-    fits_write_col(pf->fptr, TFLOAT, 13, row, 1, nchan, sub->dat_freqs, status);
-    fits_write_col(pf->fptr, TFLOAT, 14, row, 1, nchan, sub->dat_weights, status);
-    fits_write_col(pf->fptr, TFLOAT, 15, row, 1, nivals, sub->dat_offsets, status);
-    fits_write_col(pf->fptr, TFLOAT, 16, row, 1, nivals, sub->dat_scales, status);
+    ftmp = (float) sub->tel_zen;
+    fits_write_col(pf->fptr, TFLOAT, 13, row, 1, 1, &ftmp, status);
+    fits_write_col(pf->fptr, TFLOAT, 14, row, 1, nchan, sub->dat_freqs, status);
+    fits_write_col(pf->fptr, TFLOAT, 15, row, 1, nchan, sub->dat_weights, status);
+    fits_write_col(pf->fptr, TFLOAT, 16, row, 1, nivals, sub->dat_offsets, status);
+    fits_write_col(pf->fptr, TFLOAT, 17, row, 1, nivals, sub->dat_scales, status);
     if (mode==search) {
         if (hdr->nbits==2) pf_pack_8bit_to_2bit(pf, numunsigned);
         else if (hdr->nbits==4) pf_pack_8bit_to_4bit(pf, numunsigned);
-        fits_write_col(pf->fptr, TBYTE, 17, row, 1, out_nbytes, 
+        fits_write_col(pf->fptr, TBYTE, 18, row, 1, out_nbytes, 
                        sub->rawdata, status);
     } else if (mode==fold) { 
         // Fold mode writes floats for now..
-        fits_write_col(pf->fptr, TFLOAT, 17, row, 1, out_nbytes/sizeof(float), 
+        fits_write_col(pf->fptr, TFLOAT, 18, row, 1, out_nbytes/sizeof(float), 
                        sub->data, status);
     }
+    fits_write_col(pf->fptr, TDOUBLE, 19, row, 1, 1, &(sub->period), status);
 
     // Flush the buffers if not finished with the file
     // Note:  this use is not entirely in keeping with the CFITSIO

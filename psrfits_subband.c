@@ -260,7 +260,7 @@ int get_current_row(struct psrfits *pfi, struct subband_info *si) {
 
     if (firsttime) {
         row_duration = pfi->sub.tsubint;
-        printf("row duration: %f   pfi->sub.tsubint = %f\n", row_duration, pfi->sub.tsubint);
+        //printf("row duration: %f   pfi->sub.tsubint = %f\n", row_duration, pfi->sub.tsubint);
         last_offs = pfi->sub.offs-row_duration;
         orig_epoch = pfi->hdr.MJD_epoch;
         firsttime = 0;
@@ -277,7 +277,7 @@ int get_current_row(struct psrfits *pfi, struct subband_info *si) {
 
         // Read the current row of data
         psrfits_read_subint(pfi);
-        printf("*****pfi->sub.tsubint = %f %f %f %f %f\n", pfi->sub.tsubint, pfi->sub.indexval, pfi->sub.offs, pfi->sub.period, pfi->sub.lst);
+        //printf("*****pfi->sub.tsubint = %f %f %f %f %f\n", pfi->sub.tsubint, pfi->sub.indexval, pfi->sub.offs, pfi->sub.period, pfi->sub.lst);
         diff_offs = pfi->sub.offs - last_offs;
         // Handle if the file switched and the OFFS_SUB was reset
         if ((diff_offs < 0.0) && (pfi->hdr.MJD_epoch != orig_epoch)) {
@@ -288,12 +288,12 @@ int get_current_row(struct psrfits *pfi, struct subband_info *si) {
             memcpy(pfi->sub.dat_weights, si->userwgts,
                    pfi->hdr.nchan * sizeof(float));
 
-        //if (!TEST_CLOSE(diff_offs, row_duration) || pfi->status) {
-        printf("***********************");
-        printf("diff_offs = %f\n", diff_offs);
-        printf("row_duration = %f\n", row_duration);
-        printf("***********************");
-        if (1 == 0) {
+        if (!TEST_CLOSE(diff_offs, row_duration) || pfi->status) {
+        //printf("***********************");
+        //printf("diff_offs = %f\n", diff_offs);
+        //printf("row_duration = %f\n", row_duration);
+        //printf("***********************");
+        //if (1 == 0) {
             if (pfi->status) { // End of the files
                 num_pad_blocks = 1;
             } else { // Missing row(s)
@@ -493,7 +493,7 @@ void init_subbanding(struct psrfits *pfi, struct psrfits *pfo,
     pfo->hdr.nbits = cmd->outbits;
 
     // Determine the length of the outputfiles to use
-    printf("pfi->sub.tsubint = %f\n", pfi->sub.tsubint);
+    //printf("pfi->sub.tsubint = %f\n", pfi->sub.tsubint);
     if (cmd->filetimeP) {
         pfo->rows_per_file = 10 * \
             (int) rint(0.1 * (cmd->filetime / pfi->sub.tsubint));
@@ -771,7 +771,7 @@ int main(int argc, char *argv[]) {
             pf_pack_8bit_to_4bit(&pfo, si.numunsigned);
 
         // Write the new row to the output file
-        printf("pfo.sub.tsubint = %f\n", pfo.sub.tsubint);
+        //printf("pfo.sub.tsubint = %f\n", pfo.sub.tsubint);
         pfo.sub.offs = (pfo.tot_rows+0.5) * pfo.sub.tsubint;
         psrfits_write_subint(&pfo);
 

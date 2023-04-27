@@ -8,6 +8,7 @@
 #define PSRFITS_MAXFILELEN_FOLD 1L
 
 // The following is the template file to use to create a PSRFITS file.
+#define PSRFITS_TEMPLATE_DIR "/usr/local/etc"
 #define PSRFITS_SEARCH_TEMPLATE "lofar_PSRFITS_v5.4_search_template.txt"
 #define PSRFITS_FOLD_TEMPLATE "guppi_PSRFITS_v3.4_fold_template.txt"
 

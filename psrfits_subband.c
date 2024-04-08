@@ -273,12 +273,19 @@ int get_current_row(struct psrfits *pfi, struct subband_info *si) {
     printf("row %d\n", pfi->rownum);
 #endif
 
+    //printf ("num_bad_blocks = %d\n", num_pad_blocks);
     if (num_pad_blocks==0) {  // Try to read the PSRFITS file
 
         // Read the current row of data
         psrfits_read_subint(pfi);
         //printf("*****pfi->sub.tsubint = %f %f %f %f %f\n", pfi->sub.tsubint, pfi->sub.indexval, pfi->sub.offs, pfi->sub.period, pfi->sub.lst);
         diff_offs = pfi->sub.offs - last_offs;
+	//printf ("pfi->sub.offs= %f   last_offs = %f  diff_offs=%f\n", pfi->sub.offs, last_offs, diff_offs);
+	if (pfi->sub.offs == 0.) {
+		printf("!!! warning - offset from the start of the subint center is 0 (pfi->sub.offs = %f  last_offs = %f sec)\n", pfi->sub.offs, last_offs);
+		diff_offs = row_duration;
+		pfi->sub.offs = last_offs + diff_offs;
+	}
         // Handle if the file switched and the OFFS_SUB was reset
         if ((diff_offs < 0.0) && (pfi->hdr.MJD_epoch != orig_epoch)) {
             pfi->sub.offs += (pfi->hdr.MJD_epoch - orig_epoch) * 86400.0;
@@ -298,6 +305,7 @@ int get_current_row(struct psrfits *pfi, struct subband_info *si) {
                 num_pad_blocks = 1;
             } else { // Missing row(s)
                 dnum_blocks = diff_offs/row_duration - 1.0;
+                //dnum_blocks = fabs(diff_offs)/row_duration - 1.0;
                 num_pad_blocks = (int)(dnum_blocks + 1e-7);
                 pfi->rownum--;   // Will re-read when no more padding
                 pfi->tot_rows--; // Only count "real" rows towards tot_rows
@@ -328,6 +336,7 @@ int get_current_row(struct psrfits *pfi, struct subband_info *si) {
     pfi->N += pfi->hdr.nsblk;
     pfi->T = pfi->N * pfi->hdr.dt;
     num_pad_blocks--;
+    //printf ("last_offs= %f  pfi->N=%d   pfi->T=%f  num_pad_bloks= %d\n", last_offs, pfi->N, pfi->T, num_pad_blocks);
     return num_pad_blocks;
 }
 
@@ -720,6 +729,7 @@ int main(int argc, char *argv[]) {
         float *ptr = pfi.sub.fdata + si.buflen * si.bufwid;
         if (padding==0)
             stat = psrfits_read_part_DATA(&pfi, si.max_overlap, si.numunsigned, ptr);
+	//printf ("stat = %d   padding = %d\n", stat, padding);
         if (stat || padding) { // Need to use padding since we ran out of data
             printf("Adding a missing row (#%d) of padding to the subbands.\n",
                    pfi.tot_rows);
@@ -784,7 +794,9 @@ int main(int argc, char *argv[]) {
                si.max_overlap * si.bufwid * sizeof(float));
 
         // Read the next row (or padding)
+	//printf ("before padding = %d\n", padding);
         padding = get_current_row(&pfi, &si);
+	//printf ("after padding = %d\n", padding);
 
         // Set the new weights properly
         new_weights(&pfi, &pfo);
